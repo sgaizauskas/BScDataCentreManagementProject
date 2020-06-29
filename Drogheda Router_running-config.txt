@@ -1,0 +1,97 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Drogheda
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+crypto isakmp policy 1
+ encr aes
+ authentication pre-share
+ group 2
+!
+crypto isakmp key 0 address 11.0.0.2
+!
+!
+crypto ipsec security-association lifetime seconds 86400
+!
+crypto ipsec transform-set fitz esp-aes esp-sha-hmac
+!
+crypto map auda 100 ipsec-isakmp 
+ set peer 11.0.0.2
+ set security-association lifetime seconds 86400
+ set transform-set fitz 
+ match address saud
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description Link to Dublin DataCenter
+ ip address 11.0.0.2 255.0.0.0
+ duplex auto
+ speed auto
+ crypto map auda
+!
+interface FastEthernet0/1
+ description LAN @ Drogheda
+ ip address 10.0.0.1 255.0.0.0
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router rip
+ network 10.0.0.0
+ network 11.0.0.0
+!
+ip classless
+ip route 10.0.0.0 255.0.0.0 11.0.0.1 
+!
+ip flow-export version 9
+!
+!
+ip access-list extended saud
+ permit ip 192.168.101.0 0.0.0.255 10.0.0.0 0.255.255.255
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+

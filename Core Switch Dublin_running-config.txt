@@ -1,0 +1,186 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname CoreSwitch
+!
+!
+!
+!
+!
+!
+ip routing
+!
+!
+!
+!
+!
+crypto isakmp policy 1
+ encr aes
+ authentication pre-share
+ group 2
+!
+crypto isakmp key 0 address 11.0.0.2
+!
+!
+crypto ipsec security-association lifetime seconds 86400
+!
+crypto ipsec transform-set fitz esp-aes esp-sha-hmac
+!
+crypto map auda 100 ipsec-isakmp 
+ ! Incomplete
+ set peer 11.0.0.2
+ set security-association lifetime seconds 86400
+ set transform-set fitz 
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+ no switchport
+ ip address 192.168.101.2 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/21
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/22
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/23
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/24
+ switchport mode access
+ switchport nonegotiate
+!
+interface GigabitEthernet0/1
+ switchport trunk allowed vlan 10,20,102
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/2
+ switchport trunk allowed vlan 10,20,103
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Vlan1
+ description DMZ Network VLAN
+ ip address 192.168.1.1 255.255.255.0
+!
+interface Vlan10
+ description Yahoo VLAN
+ mac-address 0001.c791.aa02
+ ip address 192.168.10.1 255.255.255.0
+ ip helper-address 192.168.1.10
+!
+interface Vlan20
+ description Indeed VLAN
+ mac-address 0001.c791.aa03
+ ip address 192.168.20.1 255.255.255.0
+ ip helper-address 192.168.1.10
+!
+interface Vlan30
+ description Building Reception VLAN
+ mac-address 0001.c791.aa04
+ ip address 192.168.30.1 255.255.255.0
+ ip helper-address 192.168.1.10
+!
+interface Vlan102
+ mac-address 0001.c791.aa05
+ ip address 192.168.102.2 255.255.255.0
+!
+interface Vlan103
+ mac-address 0001.c791.aa06
+ ip address 192.168.103.2 255.255.255.0
+!
+router rip
+ network 192.168.1.0
+ network 192.168.10.0
+ network 192.168.20.0
+ network 192.168.30.0
+ network 192.168.101.0
+ network 192.168.102.0
+ network 192.168.103.0
+ network 192.168.104.0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+!
+end
+

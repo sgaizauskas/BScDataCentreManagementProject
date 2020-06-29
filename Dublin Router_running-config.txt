@@ -1,0 +1,134 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname DublinDC
+!
+!
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+crypto isakmp policy 1
+ encr aes
+ authentication pre-share
+ group 2
+!
+crypto isakmp key 0 address 11.0.0.1
+!
+!
+crypto ipsec security-association lifetime seconds 86400
+!
+crypto ipsec transform-set fitz esp-aes esp-sha-hmac
+!
+crypto map auda 100 ipsec-isakmp 
+ set peer 11.0.0.1
+ set security-association lifetime seconds 86400
+ set transform-set fitz 
+ match address saud
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description LAN @DublinDC
+ ip address 192.168.101.1 255.255.255.0
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ description VPN Link to Drogheda
+ ip address 11.0.0.1 255.0.0.0
+ duplex auto
+ speed auto
+ crypto map auda
+!
+interface FastEthernet0/0/0
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/0/1
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/0/2
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/0/3
+ switchport mode access
+ switchport nonegotiate
+!
+interface Serial0/2/0
+ description Leased Line to AmsterdamDC
+ bandwidth 64
+ ip address 193.1.40.1 255.255.255.0
+ encapsulation frame-relay ietf
+ frame-relay lmi-type ansi
+!
+interface Serial0/2/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface FastEthernet1/0
+ ip address dhcp
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router rip
+ network 11.0.0.0
+ network 86.0.0.0
+ network 192.168.101.0
+ network 193.1.40.0
+!
+ip classless
+ip route 192.168.101.0 255.255.255.0 11.0.0.2 
+!
+ip flow-export version 9
+!
+!
+ip access-list extended saud
+ permit ip 10.0.0.0 0.255.255.255 192.168.101.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+
