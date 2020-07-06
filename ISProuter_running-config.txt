@@ -4,14 +4,14 @@ no service timestamps log datetime msec
 no service timestamps debug datetime msec
 no service password-encryption
 !
-hostname ISP
+hostname Router
 !
 !
 !
 !
 ip dhcp excluded-address 86.43.38.129
 !
-ip dhcp pool Eircom
+ip dhcp pool Eir
  network 86.43.38.128 255.255.255.128
  default-router 86.43.38.129
  dns-server 159.134.191.34
@@ -60,6 +60,8 @@ interface Ethernet0/0/0
 interface Vlan1
  no ip address
  shutdown
+!
+router rip
 !
 ip classless
 !
