@@ -50,7 +50,7 @@ spanning-tree mode pvst
 !
 !
 interface FastEthernet0/0
- description Link to Dublin DataCenter
+ description VPN link to Dublin
  ip address 11.0.0.2 255.0.0.0
  duplex auto
  speed auto
